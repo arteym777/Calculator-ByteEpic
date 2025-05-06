@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Калькулятор сложных процентов</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; background-color: #f2f2f2; }
+    input, button { padding: 10px; margin: 5px; width: 200px; }
+    table { border-collapse: collapse; width: 100%; margin-top: 20px; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: center; }
+    th { background-color: #eee; }
+  </style>
+</head>
+<body>
+
+  <h1>Калькулятор сложных процентов</h1>
+
+  <label>Сумма депозита (₽):<br>
+    <input type="number" id="deposit" value="1000">
+  </label><br>
+
+  <label>Доход от команды в день (₽):<br>
+    <input type="number" id="teamIncome" value="100">
+  </label><br>
+
+  <label>Процент в день (%):<br>
+    <input type="number" id="dailyPercent" step="0.01" value="1">
+  </label><br>
+
+  <label>Количество дней:<br>
+    <input type="number" id="days" value="10">
+  </label><br>
+
+  <button onclick="calculate()">Рассчитать</button>
+
+  <table id="resultTable">
+    <thead>
+      <tr>
+        <th>День</th>
+        <th>Начальная сумма</th>
+        <th>Доход от команды</th>
+        <th>Процентный доход</th>
+        <th>Итоговая сумма</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <script>
+    function calculate() {
+      const deposit = parseFloat(document.getElementById('deposit').value);
+      const teamIncome = parseFloat(document.getElementById('teamIncome').value);
+      const percent = parseFloat(document.getElementById('dailyPercent').value) / 100;
+      const days = parseInt(document.getElementById('days').value);
+
+      const tableBody = document.querySelector("#resultTable tbody");
+      tableBody.innerHTML = '';
+
+      let total = deposit;
+
+      for (let i = 1; i <= days; i++) {
+        const startSum = total;
+        const percentIncome = (total + teamIncome) * percent;
+        total += teamIncome + percentIncome;
+
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${i}</td>
+          <td>${startSum.toFixed(2)}</td>
+          <td>${teamIncome.toFixed(2)}</td>
+          <td>${percentIncome.toFixed(2)}</td>
+          <td>${total.toFixed(2)}</td>
+        `;
+        tableBody.appendChild(row);
+      }
+    }
+  </script>
+
+</body>
+</html>
